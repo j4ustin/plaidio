@@ -67,6 +67,15 @@ class PlaidInstitutionsTest < PlaidTest
     assert_nil(response.institution.status)
   end
 
+  def test_get_by_id_include_status
+    response = client.institutions.get_by_id(SANDBOX_INSTITUTION,
+                                             options:
+                                             { include_status: true })
+    assert_equal(SANDBOX_INSTITUTION, response.institution.institution_id)
+    refute_empty(response.institution.status.item_logins)
+    refute_empty(response.institution.status.transactions_updates)
+  end
+
   def test_search
     response = client.institutions.search(SANDBOX_INSTITUTION_NAME, ['US'])
     refute_empty(response.institutions)
